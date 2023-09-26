@@ -1,24 +1,18 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux"
-import { getAllTables } from "../../redux/tablesRedux";
+import { getAllTables, getTableLoadingState } from "../../redux/tablesRedux";
 import { ListGroup, ListGroupItem, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Loader from "../common/Loader";
 
 const AllTables = () => {
 
-    const [isLoading, setIsLoading] = useState(true);
+    const loading = useSelector(getTableLoadingState); //zmiana z uż. loading jako stanu lok. w komp. w magaz
     const tables = useSelector(getAllTables);
-
-    useEffect(() => {
-        setTimeout(() => {
-            setIsLoading(false); // dane zostały wczytane
-        }, 1000); //opóźn. 1 sec
-    }, []);
 
     return (
         <section>
-            {isLoading ? ( // jeśli dane są akt. ładowane, pokaż spinner
+            {loading ? ( // jeśli dane są akt. ładowane, pokaż spinner
                 <Loader />
             ) : (
             <ListGroup variant="flush" className="mt-4">  

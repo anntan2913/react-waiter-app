@@ -1,8 +1,11 @@
 const initialState = {
 
-    tables: [
+    tables: {
+        data: [],
+        loading: true,
+    },
 
-    ],
+    tableStatus: []
 };
 
 export default initialState;
