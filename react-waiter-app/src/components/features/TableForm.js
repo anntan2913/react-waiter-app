@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getTableById, updateTableOnServer } from "../../redux/tablesRedux";
+import { getTableById, updateTableRequest } from "../../redux/tablesRedux";
 import { useEffect, useState } from "react";
 import { Form, Row, Col, Button  } from "react-bootstrap";
 import { getTableStatus } from "../../redux/tableStatusRedux";
@@ -22,7 +22,7 @@ const TableForm = () => {
 
     const handleSubmit = e =>{
     e.preventDefault();
-    dispatch(updateTableOnServer({status, peopleAmount, maxPeopleAmount, bill, id}));
+    dispatch(updateTableRequest({status, peopleAmount, maxPeopleAmount, bill, id}));
     navigate('/');
     };
 
@@ -63,12 +63,12 @@ const TableForm = () => {
 
 
   if (!tableData) {
-    return <div>Wait...</div>;
+    navigate('/');
   } else
     return (      
       <Form onSubmit={handleSubmit}>
         <Form.Group as={Row} className="mb-3 justify-content-start" controlId="formHorizontalStatus">
-            <Form.Label column sm={1}>
+            <Form.Label column sm={2} style={{ width: '100px'}}>
                 <h6><strong>Status: </strong></h6>
             </Form.Label>
             <Col sm={4}>
@@ -81,10 +81,10 @@ const TableForm = () => {
         </Form.Group>
 
         <Form.Group as={Row} className="mb-3" controlId="formHorizontalPeople">
-            <Form.Label column sm={1}>
+            <Form.Label column sm={2} style={{ width: '100px'}}>
                 <h6><strong>People: </strong></h6>
             </Form.Label>
-            <Col sm={2}>
+            <Col sm={3} style={{ width: '160px'}}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Form.Control  value={peopleAmount} onChange={e => setPeopleAmount(parseInt(e.target.value))} style={{ flex: 1, marginRight: '10px' }} />
                     <span style={{ fontWeight: 'bold' }}> / </span>
@@ -95,10 +95,10 @@ const TableForm = () => {
 
         {isBillVisible && (
          <Form.Group as={Row} className="mb-3" controlId="formHorizontalBill">
-            <Form.Label column sm={1}>
+            <Form.Label column sm={2} style={{ width: '80px'}}>
                 <h6><strong>Bill: </strong></h6>
             </Form.Label>
-            <Col sm={2} style={{ display: 'flex', alignItems: 'center', width: "10%" }}>
+            <Col sm={3} style={{ display: 'flex', alignItems: 'center', width: "140px" }}>
                 <span>$ </span>
                 <Form.Control value={bill} onChange={e => setBill(e.target.value)} style={{  marginLeft: '10px' }} />
             </Col>
@@ -106,7 +106,7 @@ const TableForm = () => {
         )}
         <Form.Group as={Row} className="mb-3 d-flex align-items-center">
             <Col sm={6}>
-            <Button type="submit" className="mb-3" style={{ width: '25%' }}>Update</Button>
+            <Button type="submit" className="mb-3" >Update</Button>
             </Col>
         </Form.Group>
       </Form>

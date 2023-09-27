@@ -45,7 +45,7 @@ const tablesReducer = (statePart = { data: [], loading: true }, action) => {
     case UPDATE_TABLES:
         return { data: action.payload, loading: false };
     case UPDATE_TABLE_ON_SERVER:
-        return { data: action.payload}?????
+        return { data: statePart.data.map(table => table.id === action.payload.id ? action.payload : table), loading: false };
     default:
         return statePart;
   };

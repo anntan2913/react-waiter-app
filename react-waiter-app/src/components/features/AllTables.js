@@ -17,13 +17,13 @@ const AllTables = () => {
             ) : (
             <ListGroup variant="flush" className="mt-4">  
                 {tables.map(table => (
-                    <ListGroupItem key={table.id} className='d-flex justify-content-between align-items-start ' > 
+                    <ListGroupItem key={table.id} className='d-flex justify-content-between align-items-start px-0' > 
                         <div className='d-flex align-items-center' style={{ hight: '100%' }} >
-                            <h4 style={{ marginRight: '20px' }}>Table {table.id}</h4>
-                            <h6><strong>  Status:</strong> {table.status}</h6>                                                       
+                            <h4 style={{ marginRight: '16px' }}>Table {table.id}</h4>
+                            <h6 style={{ margin: '0'}} ><strong>  Status:</strong> {table.status}</h6>                                                       
                         </div> 
                         <Button variant="primary" as={Link} key={table.id} to={`/table/${table.id}`} 
-                                style={{ width: '130px', height: '40px', fontSize: '16px', textAlign: "center"}}>Show more</Button>                                          
+                                style={{ width: '130px', height: '40px', fontSize: '15px', textAlign: "center", marginTop: '3px'}}>Show more</Button>                                          
                     </ListGroupItem>              
                 ))}
             </ListGroup>
