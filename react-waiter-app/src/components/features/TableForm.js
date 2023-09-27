@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getTableById, updateTableRequest } from "../../redux/tablesRedux";
+import { getTableById, updateTableRequest, getTableUpdateError } from "../../redux/tablesRedux";
 import { useEffect, useState } from "react";
 import { Form, Row, Col, Button  } from "react-bootstrap";
 import { getTableStatus } from "../../redux/tableStatusRedux";
@@ -10,6 +10,7 @@ const TableForm = () => {
     const { id } = useParams();
     const tableData = useSelector(state => getTableById(state, id));    
     const tableStatus = useSelector(getTableStatus);
+    const updateError = useSelector(getTableUpdateError);
 
     const[status, setStatus] = useState(tableData?.status || '');
     const[peopleAmount, setPeopleAmount] = useState(tableData?.peopleAmount || 0);
@@ -60,6 +61,10 @@ const TableForm = () => {
             setPeopleAmount(maxPeopleAmount);
         }
     }, [maxPeopleAmount, peopleAmount]);
+
+    if (updateError) {
+        return <div> Server Error: {updateError}</div>;
+    }  
 
 
   if (!tableData) {

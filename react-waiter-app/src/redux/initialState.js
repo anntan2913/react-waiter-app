@@ -3,6 +3,7 @@ const initialState = {
     tables: {
         data: [],
         loading: true,
+        error: null, //dodaję pole ew. błędu
     },
 
     tableStatus: []

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux"
-import { getAllTables, getTableLoadingState } from "../../redux/tablesRedux";
+import { getAllTables, getTableLoadingState, getTableUpdateError } from "../../redux/tablesRedux";
 import { ListGroup, ListGroupItem, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Loader from "../common/Loader";
@@ -9,6 +9,11 @@ const AllTables = () => {
 
     const loading = useSelector(getTableLoadingState); //zmiana z uż. loading jako stanu lok. w komp. w magaz
     const tables = useSelector(getAllTables);
+    const updateError = useSelector(getTableUpdateError);
+
+    if (updateError) {
+        return <div> Server Error: {updateError}</div>;
+    }  
 
     return (
         <section>
