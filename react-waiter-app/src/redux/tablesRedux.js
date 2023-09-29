@@ -10,6 +10,7 @@ const createActionName = actionName => `app/tables/${actionName}`;
 const UPDATE_TABLES = createActionName('UPDATE_TABLES');
 const UPDATE_TABLE_ON_SERVER = createActionName('UPDATE_TABLE_ON_SERVER');
 const UPDATE_ERROR = createActionName('UPDATE_ERROR');
+const REMOVE_TABLE_ON_SERVER = createActionName('REMOVE_TABLE_ON_SERVER');
 
 // action creators
 export const updateTables = payload => ({ type: UPDATE_TABLES, payload });
@@ -20,7 +21,7 @@ export const fetchTables = () => {
             .then(tables => dispatch(updateTables(tables)));
     };
 };
-export const updateTableOnServer = payload => ({ type: UPDATE_TABLE_ON_SERVER, payload});
+export const updateTableOnServer = payload => ({ type: UPDATE_TABLE_ON_SERVER, payload });
 export const updateError = error => ({ type: UPDATE_ERROR, error });
 export const updateTableRequest = (updatedTable) => {
     return(dispatch) => {
@@ -43,6 +44,19 @@ export const updateTableRequest = (updatedTable) => {
                 .catch(error => dispatch(updateError(error)));
     };
 };
+export const removeTableOnServer = payload => ({ type: REMOVE_TABLE_ON_SERVER, payload });
+export const removeTableRequest = (id) => {
+    return(dispatch) => {
+        const options = {
+            method: 'DELETE'
+        };
+
+        fetch(`http://localhost:3131/api/tables/${id}`, options)
+            .then(() => dispatch(removeTableOnServer(id)))
+            .catch(error => dispatch(updateError(error)));
+    };
+};
+
 
 const tablesReducer = (statePart = { data: [], loading: true, error: null }, action) => {
   switch (action.type) {
@@ -52,6 +66,8 @@ const tablesReducer = (statePart = { data: [], loading: true, error: null }, act
         return { data: statePart.data.map(table => table.id === action.payload.id ? action.payload : table), loading: false, error: null  };
     case UPDATE_ERROR:
         return { ...statePart, error: action.error, loading: false };
+    case REMOVE_TABLE_ON_SERVER:
+        return { data: statePart.data.filter(table => table.id !== action.payload.id), loading: false};
     default:
         return statePart;
   };
