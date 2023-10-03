@@ -2,30 +2,38 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { getAllTables, getTableLoadingState, getTableUpdateError } from "../../redux/tablesRedux";
 import { ListGroup, ListGroupItem, Button, Modal } from "react-bootstrap";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Loader from "../common/Loader";
 import { removeTableRequest } from "../../redux/tablesRedux";
 import { ModalHeader, ModalTitle, ModalBody, ModalFooter } from "react-bootstrap";
 
 const AllTables = () => {
 
-    const { id } = useParams();
-
     const loading = useSelector(getTableLoadingState); //zmiana z uż. loading jako stanu lok. w komp. w magaz
     const tables = useSelector(getAllTables);
     const updateError = useSelector(getTableUpdateError);
+    
+    const [selectedTableId, setSelectedTableId] = useState('');
+    const [show, setShow] = useState(false);
 
-    const [show, setShow] = useState(false);    
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleClose = () => {        
+        setSelectedTableId('');
+        setShow(false);
+    };
+    const handleShow = () => setShow(true);   
 
     const dispatch = useDispatch();
 
-    const handleRemoveTable = e => {
+    const handleRemoveTable = (tableId) => {
+        setSelectedTableId(tableId);
+        handleShow();     
+    };
+
+    const handleConfirmRemoveTable = (e) => {
         e.preventDefault();
-        dispatch(removeTableRequest(id));
-        handleClose();     
-    };  
+        dispatch(removeTableRequest(selectedTableId));
+        handleClose();
+    };
 
     if (updateError) {
         return <div> Server Error: {updateError}</div>;
@@ -46,8 +54,8 @@ const AllTables = () => {
                         <div className="d-flex flex-wrap align-items-center justify-content-between px-0">
                         <Button variant="primary" as={Link} key={table.id} to={`/table/${table.id}`} 
                                 style={{ width: '130px', height: '40px', fontSize: '16px', textAlign: "center", marginTop: '3px', flexBasis: "calc(50% - 20px)" }}>Show more</Button>                                          
-                        <Button variant="outline-danger" onClick={handleShow}
-                                style={{ width: '120px', height: '40px', fontSize: '16px', textAlign: "center", marginTop: '3px', flexBasis: "calc(50% - 20px)" }} >Delete</Button>                                       
+                        <Button variant="outline-danger" onClick={() => handleRemoveTable(table.id)}
+                                style={{ width: '120px', height: '40px', fontSize: '16px', textAlign: "center", marginTop: '3px', flexBasis: "calc(50% - 20px)" }} >Remove</Button>                                       
                         </div>
                     </ListGroupItem>              
                 ))}
@@ -65,7 +73,7 @@ const AllTables = () => {
               </ModalBody>
               <ModalFooter>
                 <Button variant="secondary" onClick={handleClose}>Cancel</Button>
-                <Button variant="danger" onClick={handleRemoveTable}>Remove</Button>
+                <Button variant="danger" onClick={handleConfirmRemoveTable}>Remove</Button>
               </ModalFooter>
             </Modal>          
         </section>

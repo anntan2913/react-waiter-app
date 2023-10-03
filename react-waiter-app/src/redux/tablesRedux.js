@@ -45,14 +45,14 @@ export const updateTableRequest = (updatedTable) => {
     };
 };
 export const removeTableOnServer = payload => ({ type: REMOVE_TABLE_ON_SERVER, payload });
-export const removeTableRequest = (id) => {
+export const removeTableRequest = (selectedTableId) => {
     return(dispatch) => {
         const options = {
             method: 'DELETE'
         };
 
-        fetch(`http://localhost:3131/api/tables/${id}`, options)
-            .then(() => dispatch(removeTableOnServer(id)))
+        fetch(`http://localhost:3131/api/tables/${selectedTableId}`, options)
+            .then(() => dispatch(removeTableOnServer(selectedTableId)))
             .catch(error => dispatch(updateError(error)));
     };
 };
@@ -67,7 +67,7 @@ const tablesReducer = (statePart = { data: [], loading: true, error: null }, act
     case UPDATE_ERROR:
         return { ...statePart, error: action.error, loading: false };
     case REMOVE_TABLE_ON_SERVER:
-        return { data: statePart.data.filter(table => table.id !== action.payload.id), loading: false};
+        return { data: statePart.data.filter(table => table.id !== action.payload), loading: false};
     default:
         return statePart;
   };
